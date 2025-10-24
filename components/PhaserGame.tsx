@@ -52,7 +52,6 @@ const PhaserGame: React.FC = () => {
 
           // ✅ Assign the Phaser game instance globally
           gameInstance = new Phaser.Game(config);
-          console.log('Phaser game instance created:', gameInstance);
         });
       });
     }

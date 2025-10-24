@@ -4,6 +4,8 @@ import { PlayerBehavior } from '../types/PlayerBehavior'
 import Item from '../items/Item'
 import Chair from '@/items/Chair'
 import VendingMachine from '@/items/VendingMachine'
+import Whiteboard from '@/items/Whiteboard'
+import Computer from '@/items/Computer'
 import { NavKeys } from '../types/KeyboardState'
 export default class PlayerSelector extends Phaser.GameObjects.Zone {
   selectedItem?: Item
@@ -38,7 +40,7 @@ export default class PlayerSelector extends Phaser.GameObjects.Zone {
 
     // while currently selecting an item,
     // if the selector and selection item stop overlapping, clear the dialog box and selected item
-    if (this.selectedItem && (this.selectedItem instanceof Chair || this.selectedItem instanceof VendingMachine)) {
+    if (this.selectedItem && (this.selectedItem instanceof Chair || this.selectedItem instanceof VendingMachine || this.selectedItem instanceof Whiteboard || this.selectedItem instanceof Computer)) {
       if (!this.scene.physics.overlap(this, this.selectedItem)) {
         this.selectedItem.clearDialogBox()
         this.selectedItem = undefined

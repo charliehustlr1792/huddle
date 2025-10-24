@@ -17,6 +17,7 @@ import { getGameInstance } from './PhaserGame'
 import Game from './Game'
 import { setReadyToConnect,setInitialisation } from '../stores/UserStore'
 import Preloader from './Preloader'
+import axios from 'axios'
 
 const Wrapper = styled.form`
   position: fixed;
@@ -43,16 +44,18 @@ const SubTitle = styled.h3`
   font-size: 16px;
   color: #eee;
   text-align: center;
+  padding-bottom: 30px;
 `
 
 const Content = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 36px 0;
 `
 
 const Left = styled.div`
-  margin-right: 48px;
-
   --swiper-navigation-size: 24px;
 
   .swiper {
@@ -85,14 +88,6 @@ const Bottom = styled.div`
   justify-content: center;
 `
 
-/* const Warning = styled.div`
-  margin-top: 30px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-` */
-
 const avatars = [
   { name: 'adam', img: Adam },
   { name: 'ash', img: Ash },
@@ -108,7 +103,11 @@ for (let i = avatars.length - 1; i > 0; i--) {
 
 export default function LoginDialog() {
   const phaserGame: Phaser.Game | null | undefined = getGameInstance()
-  const name=useAppSelector((state) => state.auth.name)
+  let name=useAppSelector((state) => state.auth.name)
+  if(name==="")
+  axios.get(`/api/get-name`).then((response) => {
+    name = response.data.name
+  })
   const [avatarIndex, setAvatarIndex] = useState<number>(0)
   const dispatch = useAppDispatch()
   const game = phaserGame?.scene.keys.game as Game
@@ -116,7 +115,6 @@ export default function LoginDialog() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-      console.log('Join! Name:', name, 'Avatar:', avatars[avatarIndex].name)
       game.registerKeys()
       if (game) {
         // Store selected avatar and name in Redux store
@@ -129,7 +127,6 @@ export default function LoginDialog() {
       if (phaserGame) {
         const preloader = phaserGame.scene.keys.preloader as Preloader
         if (preloader) {
-          console.log('Manually launching game from LoginDialog')
           preloader.launchGame()
         }
         

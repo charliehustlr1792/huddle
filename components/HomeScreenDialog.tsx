@@ -3,8 +3,6 @@ import logo from '../public/assets/cypher/Cypher.png'
 import styled from 'styled-components'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
-import Alert from '@mui/material/Alert'
-import Snackbar from '@mui/material/Snackbar'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Image from 'next/image'
 import { useEffect } from 'react'
@@ -93,85 +91,27 @@ const LogoContainer = styled.div`
   margin-bottom: 10px;
 `
 
-/* const ProgressBarWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  h3 {
-    color: #33ac96;
-  }
-`
-
-const ProgressBar = styled(LinearProgress)`
-  width: 360px;
-` */
-
 export default function HomeScreenDialog() {
   const phaserGame = getGameInstance();
   const [showSignUpForm, setShowSignUpForm] = useState(false)
   const [showSignInForm, setShowSignInForm] = useState(false)
-  const [showSnackbar, setShowSnackbar] = useState(false)
 
   const loggedIn = useAppSelector((state) => state.user.loggedIn)
 
 
   useEffect(() => {
-    // This effect runs when loggedIn state changes
     if (loggedIn && phaserGame) {
-      console.log('User logged in, launching game from HomeScreenDialog')
       const preloader = phaserGame.scene.keys.preloader as Preloader
       if (preloader) {
         preloader.launchGame()
       } else {
         console.error('Preloader scene not found')
-        setShowSnackbar(true)
       }
-    } else if (!loggedIn) {
-      setShowSnackbar(true)
     }
   }, [loggedIn, phaserGame])
 
-  /* useEffect(() => {
-    // When user is logged in, ensure all dialogs are hidden
-    if (loggedIn) {
-      const preloader = phaserGame?.scene.keys.preloader as Preloader
-      preloader.launchGame()
-    }
-    else {
-      setShowSnackbar(true)
-    }}, [loggedIn]) */
-  /*const handleConnect = () => {
-    if (lobbyJoined) {
-      const preloader = phaserGame.scene.keys.preloader as Preloader
-      preloader.network
-        .joinOrCreatePublic()
-        .then(() => preloader.launchGame())
-        .catch((error) => console.error(error))
-    } else {
-      setShowSnackbar(true)
-    }
-  } */
-
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={showSnackbar}
-        autoHideDuration={3000}
-        onClose={() => {
-          setShowSnackbar(false)
-        }}
-      >
-        <Alert
-          severity="error"
-          variant="outlined"
-          // overwrites the dark theme on render
-          style={{ background: '#fdeded', color: '#7d4747' }}
-        >
-          Trying to connect to server, please try again!
-        </Alert>
-      </Snackbar>
       <Backdrop>
         <Wrapper>
           {showSignUpForm ? (
@@ -202,7 +142,7 @@ export default function HomeScreenDialog() {
                   <Image
                     src={logo}
                     alt="Cypher Logo"
-                    fill
+                    sizes="(max-width: 100px)"
                     style={{ objectFit: "contain" }} 
                     priority
                   />
@@ -221,12 +161,6 @@ export default function HomeScreenDialog() {
             </>
           )}
         </Wrapper>
-         {/* {!lobbyJoined && (
-          <ProgressBarWrapper>
-            <h3> Connecting to server...</h3>
-            <ProgressBar color="secondary" />
-          </ProgressBarWrapper>
-        )}  */}
       </Backdrop>
     </>
   )

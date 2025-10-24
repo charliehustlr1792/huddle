@@ -76,6 +76,9 @@ export default class Preloader extends Scene {
       frameHeight: 48,
     })
 
+    this.load.audio('correct','assets/sounds/correctanswer.mp3')
+    this.load.audio('wrong','assets/sounds/wronganswer.mp3')
+    this.load.audio('win','assets/sounds/win.wav')
     this.load.on('complete', () => {
       this.preloadComplete = true
       this.launchBackground(store.getState().user.backgroundMode)
@@ -87,7 +90,6 @@ export default class Preloader extends Scene {
   launchGame() {
     if (!this.preloadComplete) return;
     
-    console.log('Launching game scene'); // Debug log
     
     // Make sure the game scene is not already running
     if (!this.scene.isActive('game')) {
@@ -107,7 +109,6 @@ export default class Preloader extends Scene {
     this.scene.launch('background', { backgroundMode })
   }
   changeBackgroundMode(backgroundMode: BackgroundMode) {
-    console.log('changing background mode');
     this.scene.stop('background')
     this.launchBackground(backgroundMode)
   }

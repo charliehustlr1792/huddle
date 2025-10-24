@@ -11,7 +11,6 @@ import { phaserEvents, Event } from '../events/EventCenter'
 
 import { ItemType } from '../types/Items'
 import { NavKeys } from '../types/KeyboardState'
-/* import { openURL } from '../utils/helpers' */
 
 export default class MyPlayer extends Player {
   private playContainerBody: Phaser.Physics.Arcade.Body
@@ -54,9 +53,13 @@ export default class MyPlayer extends Player {
     if (Phaser.Input.Keyboard.JustDown(keyR)) {
       switch (item?.itemType) {
         case ItemType.VENDINGMACHINE:
-          // hacky and hard-coded, but leaving it as is for now
-          /* const url = 'https://www.buymeacoffee.com/skyoffice'
-          openURL(url) */
+            item.openForm();
+          break
+          case ItemType.COMPUTER:
+            item.openForm();
+          break
+          case ItemType.WHITEBOARD:
+            item.openForm();
           break
       }
     }
@@ -97,8 +100,6 @@ export default class MyPlayer extends Player {
               } else {
                 playerSelector.setPosition(0, 0)
               }
-              // send new location and anim to server
-              /* network.updatePlayer(this.x, this.y, this.anims.currentAnim?.key) */
            
               store.dispatch(
                 updatePlayer({
@@ -148,7 +149,7 @@ export default class MyPlayer extends Player {
               anim: this.anims.currentAnim?.key || null,
             })
           )
-         /* const playerTexture=store.getState().user.playerTexture; */
+        }
         if (vx > 0) {
           this.play(`${this.playerTexture}_run_right`, true)
         } else if (vx < 0) {
@@ -177,7 +178,6 @@ export default class MyPlayer extends Player {
           }
         }
         break
-      }
       case PlayerBehavior.SITTING:
         // back to idle if player press E while sitting
         if (Phaser.Input.Keyboard.JustDown(keyE) && this.anims.currentAnim) {
